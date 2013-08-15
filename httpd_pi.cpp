@@ -85,8 +85,9 @@ int send_file(int clientfd, const char *path)
     char buffer[2048];
     size_t ret;
     const char s[] = "HTTP/1.1 200 OK\r\n\r\n";
-    FILE *fp = fopen(path, "rb");
+    FILE *fp;
 
+    fp = fopen(path, "rb");
     if(fp == NULL)
         return 0;
 
@@ -98,6 +99,17 @@ int send_file(int clientfd, const char *path)
 
     fprintf(stderr, "[HTTP 200] sent file %s\n", path);
     return 1;
+}
+
+bool is_path_secure(const string &path)
+{
+    if(path.size() > 0 && path.at(0) == '/')
+        return false;
+    if(path.find('\0') != string::npos)
+        return false;
+    if(path.find("..") != string::npos)
+        return false;
+    return true;
 }
 
 void process_http_request(int clientfd)
@@ -137,7 +149,7 @@ void process_http_request(int clientfd)
         pos = path.find("\x20");
         path = path.substr(0, pos);
 
-        if( !send_file(clientfd, path.c_str()) )
+        if( !is_path_secure(path) || !send_file(clientfd, path.c_str()) )
             send_http404(clientfd);
     }
 }
