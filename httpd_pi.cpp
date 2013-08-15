@@ -182,14 +182,19 @@ int main(int argc, char *argv[])
 
     switch(argc)
     {
+        case 4:
+            port = argv[3];
         case 3:
-            port = argv[2];
+            host = argv[2];
         case 2:
-            host = argv[1];
-        case 1:
+            if(chdir(argv[1]) == -1)
+            {
+                perror("chdir");
+                exit(EXIT_FAILURE);
+            }
             break;
         default:
-            fprintf(stderr, "invalid arguments\n");
+            fprintf(stderr, "usage: httpd_pi webdir [ host [ port ]]\n");
             exit(EXIT_FAILURE);
     }
 
