@@ -180,6 +180,19 @@ int main(int argc, char *argv[])
     const char *host = "127.0.0.1";
     const char *port = "8080";
 
+    switch(argc)
+    {
+        case 3:
+            port = argv[2];
+        case 2:
+            host = argv[1];
+        case 1:
+            break;
+        default:
+            fprintf(stderr, "invalid arguments\n");
+            exit(EXIT_FAILURE);
+    }
+
     signal(SIGCHLD, SIG_IGN);
 
     listenfd = tcp_listen(host, port, NULL);
