@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
             }
             break;
         default:
-            fprintf(stderr, "usage: httpd_pi webdir [ host [ port ]]\n");
+            fprintf(stderr, "usage: httpd_pi webdir [ host [ port ] ]\n");
             exit(EXIT_FAILURE);
     }
 
